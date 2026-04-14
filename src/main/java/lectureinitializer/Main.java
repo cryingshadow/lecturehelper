@@ -14,6 +14,7 @@ public class Main {
             Set.of(Flag.CLASSFILE),
             Set.of(Flag.CLASSFILE, Flag.ASSIGNMENT),
             Set.of(Flag.PARTICIPANTS, Flag.EXPORT),
+            Set.of(Flag.ATTENDANCE),
             Set.of(Flag.ATTENDANCE, Flag.EXPORT),
             Set.of(Flag.QUIZ, Flag.OUTPUT)
         );
@@ -55,10 +56,14 @@ public class Main {
                 new File(options.get(Flag.EXPORT))
             );
         } else if (options.containsKey(Flag.ATTENDANCE)) {
-            AttendanceListUpdater.updateAttendanceList(
-                new File(options.get(Flag.ATTENDANCE)),
-                new File(options.get(Flag.EXPORT))
-            );
+            if (options.containsKey(Flag.EXPORT)) {
+                AttendanceListUpdater.updateAttendanceList(
+                    new File(options.get(Flag.ATTENDANCE)),
+                    new File(options.get(Flag.EXPORT))
+                );
+            } else {
+                ReviewerAssignments.writeAssignment(new File(options.get(Flag.ATTENDANCE)));
+            }
         } else {
             QuizQuestions.transformQuizFile(new File(options.get(Flag.QUIZ)), new File(options.get(Flag.OUTPUT)));
         }
