@@ -12,6 +12,8 @@ public enum Flag implements Parameter {
 
     EXPORT("e", "export", "CSV-export of the outlook calendar or teams participants."),
 
+    MODE("m", "mode", "Execution mode (ATTENDANCE, CLASS, LIST, QUIZ, REVIEWER, TALK)."),
+
     OUTPUT("o", "output", "File for output."),
 
     PARTICIPANTS("p", "participants", "File containing the participants of lectures."),

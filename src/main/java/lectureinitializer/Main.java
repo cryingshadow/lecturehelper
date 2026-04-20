@@ -9,16 +9,6 @@ import clit.*;
 
 public class Main {
 
-    private static final List<Set<Flag>> ALLOWED_COMBINATIONS =
-        List.of(
-            Set.of(Flag.CLASSFILE),
-            Set.of(Flag.CLASSFILE, Flag.ASSIGNMENT),
-            Set.of(Flag.PARTICIPANTS, Flag.EXPORT),
-            Set.of(Flag.ATTENDANCE),
-            Set.of(Flag.ATTENDANCE, Flag.EXPORT),
-            Set.of(Flag.QUIZ, Flag.OUTPUT)
-        );
-
     public static String escapeForLaTeX(final String text) {
         return text.replaceAll("\\\\", "\\\\textbackslash")
             .replaceAll("([&\\$%\\{\\}_#])", "\\\\$1")
@@ -38,48 +28,52 @@ public class Main {
             return;
         }
         final Parameters<Flag> options = tamer.parse(args);
-        if (!Main.ALLOWED_COMBINATIONS.contains(options.keySet())) {
-            System.out.println(tamer.getParameterDescriptions());
-            System.out.println(Main.helpText());
-            return;
-        }
-        if (options.containsKey(Flag.CLASSFILE)) {
-            final File classFile = new File(options.get(Flag.CLASSFILE));
-            if (options.containsKey(Flag.ASSIGNMENT)) {
-                TalkAssignments.prepareTalk(new File(options.get(Flag.ASSIGNMENT)), classFile);
-            } else {
-                ParticipantsAndDates.writeParticipantsLists(classFile);
-            }
-        } else if (options.containsKey(Flag.PARTICIPANTS)) {
+        switch (Mode.valueOf(options.get(Flag.MODE))) {
+        case ATTENDANCE:
+            AttendanceListUpdater.updateAttendanceList(
+                new File(options.get(Flag.ATTENDANCE)),
+                new File(options.get(Flag.EXPORT))
+            );
+            break;
+        case CLASS:
             CalendarExport.createClassFiles(
                 new File(options.get(Flag.PARTICIPANTS)),
                 new File(options.get(Flag.EXPORT))
             );
-        } else if (options.containsKey(Flag.ATTENDANCE)) {
-            if (options.containsKey(Flag.EXPORT)) {
-                AttendanceListUpdater.updateAttendanceList(
-                    new File(options.get(Flag.ATTENDANCE)),
-                    new File(options.get(Flag.EXPORT))
-                );
-            } else {
-                ReviewerAssignments.writeAssignment(new File(options.get(Flag.ATTENDANCE)));
-            }
-        } else {
+            break;
+        case LIST:
+            ParticipantsAndDates.writeParticipantsLists(new File(options.get(Flag.CLASSFILE)));
+            break;
+        case QUIZ:
             QuizQuestions.transformQuizFile(new File(options.get(Flag.QUIZ)), new File(options.get(Flag.OUTPUT)));
+            break;
+        case REVIEWER_ASSIGN:
+            ReviewerAssignments.writeAssignment(new File(options.get(Flag.PARTICIPANTS)));
+            break;
+        case REVIEWER_SHOW:
+            ReviewerAssignments.showAssignmentsByReviewer(new File(options.get(Flag.ASSIGNMENT)));
+            break;
+        case TALK:
+            TalkAssignments.prepareTalk(new File(options.get(Flag.ASSIGNMENT)), new File(options.get(Flag.CLASSFILE)));
+            break;
+        default:
+            throw new IllegalStateException("Unknown Mode detected!");
         }
     }
 
     private static String helpText() {
         return String.format(
-            "Allowed combinations: %s",
-            Main.ALLOWED_COMBINATIONS
-            .stream()
-            .map(set ->
-                set
-                .stream()
-                .map(flag -> "-" + flag.shortName())
-                .collect(Collectors.joining(" and "))
-            ).collect(Collectors.joining(", "))
+            "Available modes:\n%s",
+            Arrays.stream(Mode.values())
+            .map(mode ->
+                String.format(
+                    "%s (%s)",
+                    mode.name(),
+                    mode.parameters.stream()
+                    .map(flag -> "-" + flag.shortName())
+                    .collect(Collectors.joining(" and "))
+                )
+            ).collect(Collectors.joining("\n"))
         );
     }
 

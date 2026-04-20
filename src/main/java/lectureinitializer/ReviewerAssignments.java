@@ -9,6 +9,36 @@ public class ReviewerAssignments extends ArrayList<ReviewerAssignment> {
 
     private static final long serialVersionUID = 1L;
 
+    public static void showAssignmentsByReviewer(final File assignmentFile) throws IOException {
+        final ReviewerAssignments assignments = new ReviewerAssignments();
+        try (BufferedReader reader = new BufferedReader(new FileReader(assignmentFile))) {
+            String line = reader.readLine();
+            while (line != null) {
+                if (line.isBlank()) {
+                    line = reader.readLine();
+                    continue;
+                }
+                final String[] columns = line.split(";");
+                assignments.add(new ReviewerAssignment(columns[0], columns[1], columns[2], columns[3], columns[4]));
+                line = reader.readLine();
+            }
+        }
+        final Map<String, List<String>> byReviewers = new TreeMap<String, List<String>>();
+        for (final ReviewerAssignment assignment : assignments) {
+            byReviewers.merge(assignment.reviewer1(), List.of(assignment.participant()), ReviewerAssignments::concat);
+            byReviewers.merge(assignment.reviewer2(), List.of(assignment.participant()), ReviewerAssignments::concat);
+            byReviewers.merge(assignment.reviewer3(), List.of(assignment.participant()), ReviewerAssignments::concat);
+        }
+        for (final Map.Entry<String, List<String>> entry : byReviewers.entrySet()) {
+            System.out.print(entry.getKey());
+            System.out.println(":");
+            for (final String participant : entry.getValue()) {
+                System.out.println(participant);
+            }
+            System.out.println();
+        }
+    }
+
     public static void writeAssignment(final File attendanceList) throws IOException {
         final Path root = attendanceList.getAbsoluteFile().toPath().getParent();
         final File output = root.resolve("reviewerAssignment.csv").toFile();
@@ -22,6 +52,14 @@ public class ReviewerAssignments extends ArrayList<ReviewerAssignment> {
                 writer.write("\n");
             }
         }
+    }
+
+    private static List<String> concat(final List<String> list1, final List<String> list2) {
+        return Stream.concat(list1.stream(), list2.stream()).toList();
+    }
+
+    public ReviewerAssignments() {
+        super();
     }
 
     public ReviewerAssignments(final BufferedReader reader) throws IOException {
@@ -60,6 +98,10 @@ public class ReviewerAssignments extends ArrayList<ReviewerAssignment> {
                 )
             );
         }
+    }
+
+    public ReviewerAssignments(final Collection<ReviewerAssignment> assignments) {
+        super(assignments);
     }
 
     private int findConflict(
