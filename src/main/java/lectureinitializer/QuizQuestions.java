@@ -67,7 +67,8 @@ public class QuizQuestions extends ArrayList<QuizQuestion> {
         while (iterator.hasNext()) {
             final String line = iterator.next();
             if (counter == 0) {
-                question = Main.escapeForLaTeX(line.strip().replaceAll("^(Frage\\s*)?\\d+(\\.|\\)|:|\\s)+", ""));
+                question =
+                    Main.escapeForLaTeX(line.strip().replaceAll("^(Frage\\s*)?\\(*\\s*\\d+(\\.|\\)|:|\\s)+", ""));
             } else {
                 final String stripped =
                     Main.escapeForLaTeX(line.strip().replaceAll("^(\\d|[abcdABCD])(\\.|\\)|:|\\s)+", ""));
