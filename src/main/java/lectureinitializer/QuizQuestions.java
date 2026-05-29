@@ -58,6 +58,14 @@ public class QuizQuestions extends ArrayList<QuizQuestion> {
         }
     }
 
+    public QuizQuestions() {
+        super();
+    }
+
+    public QuizQuestions(final Collection<? extends QuizQuestion> questions) {
+        super(questions);
+    }
+
     public QuizQuestions(final Iterator<String> iterator) {
         super();
         int counter = 0;
