@@ -170,8 +170,8 @@ public class ProtocolFileWriter {
                 writer.write("\\relatedamounti{}\n");
                 writer.write("\\relatedqualityii{}\n");
                 writer.write("\\quotingapplicationii{}\n");
-                writer.write("\\methodapplicationii{}\n");
                 writer.write("\\methodintroi{}\n");
+                writer.write("\\methodapplicationii{}\n");
                 writer.write("\\objectivityi{}\n");
                 writer.write("\\reliabilityi{}\n");
                 writer.write("\\validityi{}\n");
