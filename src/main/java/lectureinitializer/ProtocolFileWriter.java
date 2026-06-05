@@ -251,6 +251,7 @@ public class ProtocolFileWriter {
         writer.write("\\quizbonusi{}\n");
         writer.write("\\quizbonusii{}\n");
         writer.write("\\quizbonusiii{}\n");
+        writer.write("\\quizparticipantstats{}{}\n");
         writer.write("\\quizparticipantbonusi{}\n");
         writer.write("\\quizparticipantbonusii{}\n");
         writer.write("\\quizparticipantbonusiii{}\n");
