@@ -207,15 +207,10 @@ public class ProtocolFileWriter {
                 writer.write("\\evaluationpartresult{10}\n");
                 writer.write("}\n\n");
                 writer.write("\\newcommand{\\quiz}{\n");
+                writer.write("\\quizdefault{}\n");
                 writer.write("\\quizcontentv{}\n");
                 writer.write("\\quizdifficultyv{}\n");
-                writer.write("\\quizpassed{}\n");
-                writer.write("\\quizbonusi{}\n");
-                writer.write("\\quizbonusii{}\n");
-                writer.write("\\quizbonusiii{}\n");
-                writer.write("\\quizparticipantbonusi{}\n");
-                writer.write("\\quizparticipantbonusii{}\n");
-                writer.write("\\quizparticipantbonusiii{}\n");
+                ProtocolFileWriter.writeQuizCommands(writer);
                 writer.write("\\evaluationpartresult{20}\n");
                 writer.write("}\n\n");
                 break;
