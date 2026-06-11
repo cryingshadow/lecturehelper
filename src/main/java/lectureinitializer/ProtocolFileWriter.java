@@ -192,7 +192,7 @@ public class ProtocolFileWriter {
                 writer.write("\\literaturestylei{}\n\n");
                 writer.write("\\evaluationpartresult{35}\n");
                 writer.write("}\n\n");
-                writer.write("\\newcommand{\\reviews}{\n");
+                writer.write("\\newcommand{\\reviews}{%\n");
                 writer.write("Zu den folgenden Ausarbeitungen wurden Gutachten verfasst:\n");
                 writer.write("\\begin{itemize}\n");
                 writer.write("\\item 1\n");
@@ -206,7 +206,7 @@ public class ProtocolFileWriter {
                 writer.write("\\reviewevaluationii{}\n");
                 writer.write("\\evaluationpartresult{10}\n");
                 writer.write("}\n\n");
-                writer.write("\\newcommand{\\quiz}{\n");
+                writer.write("\\newcommand{\\quiz}{%\n");
                 writer.write("\\quizdefault{}\n");
                 writer.write("\\quizcontentv{}\n");
                 writer.write("\\quizdifficultyv{}\n");
