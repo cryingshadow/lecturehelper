@@ -16,7 +16,8 @@ public class ProtocolFileWriter {
     ) throws IOException {
         final String[] nameParts = assignment.topicAssignment().participant().split(" ");
         final String lastName = nameParts[nameParts.length - 1];
-        final String protocol = String.format("protokoll%s%s.tex", subject.shortName(), ProtocolFileWriter.toASCII(lastName));
+        final String protocol =
+            String.format("protokoll%s%s.tex", subject.shortName(), ProtocolFileWriter.toASCII(lastName));
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(protocols.resolve(protocol).toFile()))) {
             writer.write("\\documentclass{article}\n\n");
             writer.write("\\input{../../../../../../templates/protocol/packages.tex}\n");

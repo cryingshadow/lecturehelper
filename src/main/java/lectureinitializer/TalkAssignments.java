@@ -146,15 +146,24 @@ public class TalkAssignments extends LinkedList<TalkAssignment> {
     }
 
     private static void writeBuildFile(final Path protocols) throws IOException {
-        final File build = protocols.resolve("build.sh").toFile();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(build))) {
-            writer.write("#!/bin/bash\n\n");
-            writer.write("for i in *.tex; do\n");
-            writer.write("    pdflatex \"$i\"\n");
-            writer.write("    pdflatex \"$i\"\n");
-            writer.write("done\n");
-        }
-        build.setExecutable(true);
+        ScriptWriter.writeExecutableScript(
+            protocols,
+            "build.sh",
+            List.of(
+                "#!/bin/bash\n\n",
+                "",
+                "compile(){",
+                "    pdflatex \"$1\"",
+                "    pdflatex \"$1\"",
+                "}",
+                "",
+                "for i in *.tex; do",
+                "    compile \"$i\" &",
+                "done",
+                "",
+                "wait"
+            )
+        );
     }
 
     private static void writeDateLineToConsole(final LocalDate date) {

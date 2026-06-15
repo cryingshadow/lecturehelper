@@ -60,7 +60,7 @@ public record ParticipantsAndDates(String[] participants, String[] dates) {
                 }
             }
         }
-        ParticipantsAndDates.writeExecutableScript(
+        ScriptWriter.writeExecutableScript(
             root,
             "groups.sh",
             List.of(
@@ -77,7 +77,7 @@ public record ParticipantsAndDates(String[] participants, String[] dates) {
                 "fi"
             )
         );
-        ParticipantsAndDates.writeExecutableScript(
+        ScriptWriter.writeExecutableScript(
             root,
             "pick.sh",
             List.of(
@@ -93,9 +93,9 @@ public record ParticipantsAndDates(String[] participants, String[] dates) {
             final String thirdLine = reader.readLine();
             if (thirdLine != null && !thirdLine.isBlank()) {
                 if ("EXAM".equals(thirdLine)) {
-                    Path exercisesPath = root.resolve("exercises");
+                    final Path exercisesPath = root.resolve("exercises");
                     exercisesPath.toFile().mkdir();
-                    ParticipantsAndDates.writeExecutableScript(
+                    ScriptWriter.writeExecutableScript(
                         exercisesPath,
                         "exgen.sh",
                         List.of(
@@ -112,7 +112,7 @@ public record ParticipantsAndDates(String[] participants, String[] dates) {
                             String.format("cd ../classes/%s/exercises", root.getFileName().toString())
                         )
                     );
-                    ParticipantsAndDates.writeExecutableScript(
+                    ScriptWriter.writeExecutableScript(
                         exercisesPath,
                         "build.sh",
                         List.of(
@@ -120,20 +120,24 @@ public record ParticipantsAndDates(String[] participants, String[] dates) {
                             "",
                             ". exgen.sh",
                             "",
+                            "compile(){",
+                            "    pdflatex \"$1\"",
+                            "    pdflatex \"$1\"",
+                            "}",
+                            "",
                             "for i in exercise*.tex; do",
-                            "    pdflatex \"$i\"",
-                            "    pdflatex \"$i\"",
+                            "    compile \"$i\" &",
                             "done",
                             "",
                             "for i in solution*.tex; do",
-                            "    pdflatex \"$i\"",
-                            "    pdflatex \"$i\"",
+                            "    compile \"$i\" &",
                             "done",
                             "",
                             "for i in exampleExam*.tex; do",
-                            "    pdflatex \"$i\"",
-                            "    pdflatex \"$i\"",
-                            "done"
+                            "    compile \"$i\" &",
+                            "done",
+                            "",
+                            "wait"
                         )
                     );
                 } else {
@@ -143,7 +147,8 @@ public record ParticipantsAndDates(String[] participants, String[] dates) {
                         topics[i] = reader.readLine().split(";")[0];
                     }
                     try (
-                        BufferedWriter writer = new BufferedWriter(new FileWriter(root.resolve("preferences.txt").toFile()))
+                        BufferedWriter writer =
+                            new BufferedWriter(new FileWriter(root.resolve("preferences.txt").toFile()))
                     ) {
                         writer.write(String.valueOf(numOfTopics));
                         writer.write("\n");
@@ -161,21 +166,6 @@ public record ParticipantsAndDates(String[] participants, String[] dates) {
                 }
             }
         }
-    }
-
-    private static void writeExecutableScript(
-        final Path root,
-        final String name,
-        final List<String> lines
-    ) throws IOException {
-        final File script = root.resolve(name).toFile();
-        try (final BufferedWriter writer = new BufferedWriter(new FileWriter(script))) {
-            for (String line : lines) {
-                writer.write(line);
-                writer.write("\n");
-            }
-        }
-        script.setExecutable(true);
     }
 
 }
