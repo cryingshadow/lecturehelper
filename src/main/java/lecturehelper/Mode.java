@@ -4,6 +4,8 @@ import java.util.*;
 
 public enum Mode {
 
+    ARCHIVE("Zip all examination files inot one zip archive.", Set.of(Flag.CLASSFILE, Flag.OUTPUT)),
+
     ATTENDANCE("Update attendance list based on Teams export.", Set.of(Flag.ATTENDANCE, Flag.EXPORT)),
 
     CLASS(

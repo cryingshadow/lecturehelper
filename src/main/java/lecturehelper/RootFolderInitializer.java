@@ -9,10 +9,8 @@ import lecturehelper.structures.*;
 public class RootFolderInitializer {
 
     public static void initializeRootFolder(final File classFile) throws IOException {
-        final String classFileName = classFile.getName();
-        final String classIdentifier = classFileName.substring(0, classFileName.length() - 4);
+        final Path root = Main.getRootFromClassFile(classFile);
         final ParticipantsAndDates participantsAndDates = ParticipantsAndDates.fromFile(classFile);
-        final Path root = classFile.getAbsoluteFile().toPath().getParent().resolve(classIdentifier);
         if (!root.toFile().mkdir()) {
             throw new IOException("Could not create directory " + root.toFile().getName() + "!");
         }

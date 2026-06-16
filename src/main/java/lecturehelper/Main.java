@@ -2,6 +2,7 @@ package lecturehelper;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -20,6 +21,12 @@ public class Main {
             .replaceAll("^\"", "''");
     }
 
+    public static Path getRootFromClassFile(final File classFile) {
+        final String classFileName = classFile.getName();
+        final String classIdentifier = classFileName.substring(0, classFileName.length() - 4);
+        return classFile.getAbsoluteFile().toPath().getParent().resolve(classIdentifier);
+    }
+
     public static void main(final String[] args)
     throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         final CLITamer<Flag> tamer = new CLITamer<Flag>(Flag.class);
@@ -30,6 +37,13 @@ public class Main {
         }
         final Parameters<Flag> options = tamer.parse(args);
         switch (Mode.valueOf(options.get(Flag.MODE))) {
+        case ARCHIVE:
+            ExaminationArchiver.archiveExaminationFiles(
+                new File(options.get(Flag.CLASSFILE)),
+                Optional.ofNullable(options.get(Flag.EXCLUDE)).map(File::new),
+                new File(options.get(Flag.OUTPUT))
+            );
+            break;
         case ATTENDANCE:
             AttendanceListUpdater.updateAttendanceList(
                 new File(options.get(Flag.ATTENDANCE)),

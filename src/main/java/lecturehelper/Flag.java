@@ -10,6 +10,8 @@ public enum Flag implements Parameter {
 
     CLASSFILE("c", "classfile", "File containing the participants and dates of the lecture."),
 
+    EXCLUDE("x", "exclude", "File containing the participants who should be excluded."),
+
     EXPORT("e", "export", "CSV-export of the outlook calendar or teams participants."),
 
     MODE("m", "mode", "Execution mode (ATTENDANCE, CLASS, LIST, QUIZ, REVIEWER, TALK)."),
