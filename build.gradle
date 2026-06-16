@@ -18,7 +18,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'lectureinitializer.Main'
+    mainClass = 'lecturehelper.Main'
 }
 
 java {
@@ -28,9 +28,9 @@ java {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'lectureinitializer.Main'
+        attributes 'Main-Class': 'lecturehelper.Main'
     }
-    archiveBaseName = 'lectureinitializer'
+    archiveBaseName = 'lecturehelper'
     from { configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 

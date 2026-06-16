@@ -1,9 +1,11 @@
-package lectureinitializer;
+package lecturehelper;
 
 import java.io.*;
 
 import org.testng.*;
 import org.testng.annotations.*;
+
+import lecturehelper.*;
 
 public class ParticipantsAndDatesTest {
 

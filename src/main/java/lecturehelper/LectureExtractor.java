@@ -1,4 +1,4 @@
-package lectureinitializer;
+package lecturehelper;
 
 import java.util.*;
 import java.util.function.*;

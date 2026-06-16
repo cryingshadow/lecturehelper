@@ -1,4 +1,4 @@
-package lectureinitializer;
+package lecturehelper;
 
 import java.io.*;
 import java.nio.file.*;
@@ -14,10 +14,12 @@ public class ProtocolFileWriter {
         final String place,
         final TalkAssignment assignment
     ) throws IOException {
-        final String[] nameParts = assignment.topicAssignment().participant().split(" ");
-        final String lastName = nameParts[nameParts.length - 1];
         final String protocol =
-            String.format("protokoll%s%s.tex", subject.shortName(), ProtocolFileWriter.toASCII(lastName));
+            String.format(
+                "protokoll%s%s.tex",
+                subject.shortName(),
+                NameTransformer.encodeNameForFile(assignment.topicAssignment().participant())
+            );
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(protocols.resolve(protocol).toFile()))) {
             writer.write("\\documentclass{article}\n\n");
             writer.write("\\input{../../../../../../templates/protocol/packages.tex}\n");
@@ -226,19 +228,6 @@ public class ProtocolFileWriter {
                 writer.write("\\input{../../../../../../templates/protocol/protocol.tex}\n");
             }
         }
-    }
-
-    private static String toASCII(final String name) {
-        return name
-            .replaceAll("ä", "ae")
-            .replaceAll("Ä", "Ae")
-            .replaceAll("ö", "oe")
-            .replaceAll("Ö", "Oe")
-            .replaceAll("ü", "ue")
-            .replaceAll("Ü", "Ue")
-            .replaceAll("ß", "ss")
-            .replaceAll("é", "e")
-            .replaceAll("[^\\x00-\\x7F]", "");
     }
 
     private static void writeQuizCommands(final BufferedWriter writer) throws IOException {

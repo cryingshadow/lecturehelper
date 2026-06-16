@@ -1,4 +1,4 @@
-package lectureinitializer;
+package lecturehelper;
 
 import clit.*;
 
