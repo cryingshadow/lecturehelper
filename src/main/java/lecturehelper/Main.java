@@ -55,7 +55,10 @@ public class Main {
             ReviewerAssignments.showAssignmentsByReviewer(new File(options.get(Flag.ASSIGNMENT)));
             break;
         case TALK:
-            TalkAssignments.prepareTalk(new File(options.get(Flag.ASSIGNMENT)), new File(options.get(Flag.CLASSFILE)));
+            ProtocolsFolderInitializer.initializeProtocolsFolder(
+                new File(options.get(Flag.ASSIGNMENT)),
+                new File(options.get(Flag.CLASSFILE))
+            );
             break;
         default:
             throw new IllegalStateException("Unknown Mode detected!");
