@@ -81,10 +81,11 @@ public class ExaminationArchiver {
             ZipOutputStream zip = new ZipOutputStream(outputStream);
         ) {
             for (final Map.Entry<String, List<Path>> entry : filesByParticipant.entrySet()) {
-                zip.putNextEntry(new ZipEntry(entry.getKey() + "/"));
+                final String folderName = entry.getKey().replaceAll(" ", "_");
+                zip.putNextEntry(new ZipEntry(folderName + "/"));
                 zip.closeEntry();
                 for (final Path file : entry.getValue()) {
-                    ExaminationArchiver.addToZipFile(file, entry.getKey(), zip);
+                    ExaminationArchiver.addToZipFile(file, folderName, zip);
                 }
             }
             for (final String folderName : commonFolders) {
