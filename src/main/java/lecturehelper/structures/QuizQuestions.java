@@ -1,9 +1,11 @@
-package lecturehelper;
+package lecturehelper.structures;
 
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
+
+import lecturehelper.*;
 
 public class QuizQuestions extends ArrayList<QuizQuestion> {
 

@@ -3,6 +3,7 @@ package lecturehelper;
 import java.util.*;
 import java.util.function.*;
 
+import lecturehelper.structures.*;
 import ocp.*;
 
 public class LectureExtractor implements Function<OCEntry, Lecture> {

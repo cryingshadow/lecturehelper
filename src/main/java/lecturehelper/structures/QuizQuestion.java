@@ -1,4 +1,4 @@
-package lecturehelper;
+package lecturehelper.structures;
 
 import java.util.*;
 

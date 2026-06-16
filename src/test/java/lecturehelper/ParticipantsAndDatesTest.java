@@ -5,6 +5,8 @@ import java.io.*;
 import org.testng.*;
 import org.testng.annotations.*;
 
+import lecturehelper.structures.*;
+
 public class ParticipantsAndDatesTest {
 
     @DataProvider

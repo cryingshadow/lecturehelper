@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import clit.*;
+import lecturehelper.structures.*;
 
 public class Main {
 
@@ -42,7 +43,7 @@ public class Main {
             );
             break;
         case LIST:
-            ParticipantsAndDates.writeParticipantsLists(new File(options.get(Flag.CLASSFILE)));
+            RootFolderInitializer.initializeRootFolder(new File(options.get(Flag.CLASSFILE)));
             break;
         case QUIZ:
             QuizQuestions.transformQuizFile(new File(options.get(Flag.QUIZ)), new File(options.get(Flag.OUTPUT)));

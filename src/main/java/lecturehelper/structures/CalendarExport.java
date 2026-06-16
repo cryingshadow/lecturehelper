@@ -1,10 +1,11 @@
-package lecturehelper;
+package lecturehelper.structures;
 
 import java.io.*;
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;
 
+import lecturehelper.*;
 import ocp.*;
 
 public class CalendarExport extends LinkedHashMap<Lecture, List<OCEntry>>{

@@ -5,6 +5,8 @@ import java.nio.file.*;
 import java.time.format.*;
 import java.util.*;
 
+import lecturehelper.structures.*;
+
 public class ProtocolFileWriter {
 
     public static void writeProtocolFile(
