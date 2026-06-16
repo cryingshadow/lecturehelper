@@ -11,8 +11,6 @@ import java.util.stream.*;
 import org.testng.*;
 import org.testng.annotations.*;
 
-import lecturehelper.*;
-
 public class TalkAssignmentsTest {
 
     @DataProvider
