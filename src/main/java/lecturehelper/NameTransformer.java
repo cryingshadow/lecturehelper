@@ -12,7 +12,7 @@ public class NameTransformer {
         if (!matcher.find()) {
             return Optional.empty();
         }
-        return Optional.of(fileName.substring(matcher.start() + 1, matcher.end() - 1));
+        return Optional.of(fileName.substring(matcher.start() + 1, matcher.end() - 1).replaceAll("_", " "));
     }
 
     public static String encodeNameForFile(final String name) {
