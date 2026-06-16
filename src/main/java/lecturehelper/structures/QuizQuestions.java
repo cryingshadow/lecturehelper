@@ -5,27 +5,30 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
+import com.google.gson.*;
+
 import lecturehelper.*;
 
 public class QuizQuestions extends ArrayList<QuizQuestion> {
 
+    private static final Gson GSON = new Gson();
+
     private static final long serialVersionUID = 1L;
 
-    public static void transformQuizFile(final File quiz, final File output) throws IOException {
-        final List<String> lines = Files.lines(quiz.toPath()).filter(line -> !line.isBlank()).toList();
-        final Iterator<String> iterator = lines.iterator();
-        final String topic = iterator.next();
-        final QuizQuestions questions = new QuizQuestions(iterator);
+    public static void transformQuizFile(final File quizFile, final File output) throws IOException {
+        final Quiz quiz = QuizQuestions.parseQuiz(quizFile);
         final Random random = new Random();
         final List<Character> correctAnswers = new LinkedList<Character>();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
             writer.write("\\documentclass[12pt]{article}\n\n");
             writer.write("\\input{../../../../../../templates/mctests.tex}\n\n");
             writer.write("\\begin{document}\n\n");
-            writer.write("\\newtest{");
-            writer.write(topic);
+            writer.write("\\newtest[");
+            writer.write(quiz.student());
+            writer.write("]{");
+            writer.write(quiz.title());
             writer.write("}\n\n");
-            for (final QuizQuestion question : questions) {
+            for (final QuizQuestion question : quiz.questions()) {
                 writer.write("\\question{");
                 writer.write(question.question());
                 writer.write("}{%\n");
@@ -58,6 +61,20 @@ public class QuizQuestions extends ArrayList<QuizQuestion> {
             writer.write(correctAnswers.stream().map(String::valueOf).collect(Collectors.joining(";")));
             writer.write("\n\n\\end{document}\n\n");
         }
+    }
+
+    private static Quiz parseQuiz(final File quizFile) throws IOException {
+        if (quizFile.getName().toLowerCase().endsWith("json")) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(quizFile))) {
+                return QuizQuestions.GSON.fromJson(reader, Quiz.class);
+            }
+        }
+        final List<String> lines = Files.lines(quizFile.toPath()).filter(line -> !line.isBlank()).toList();
+        final Iterator<String> iterator = lines.iterator();
+        final String student = iterator.next();
+        final String topic = iterator.next();
+        final QuizQuestions questions = new QuizQuestions(iterator);
+        return new Quiz(topic, student, questions);
     }
 
     public QuizQuestions() {
