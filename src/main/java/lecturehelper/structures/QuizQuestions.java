@@ -20,35 +20,34 @@ public class QuizQuestions extends ArrayList<QuizQuestion> {
             writer.write("\\input{../../../../../../templates/mctests.tex}\n\n");
             writer.write("\\begin{document}\n\n");
             writer.write("\\newtest[");
-            writer.write(quiz.student());
+            writer.write(LaTeXUtils.escapeForLaTeX(quiz.student()));
             writer.write("]{");
-            writer.write(quiz.title());
+            writer.write(LaTeXUtils.escapeForLaTeX(quiz.title()));
             writer.write("}\n\n");
-            for (final QuizQuestion question : quiz.questions()) {
+            final QuizQuestions questions = new QuizQuestions(quiz.questions());
+            Collections.shuffle(questions);
+            for (final QuizQuestion question : questions) {
+                final List<String> wrongAnswers = new ArrayList<String>(question.wrongAnswers());
+                Collections.shuffle(wrongAnswers);
                 writer.write("\\question{");
-                writer.write(question.question());
+                writer.write(LaTeXUtils.escapeForLaTeX(question.question()));
                 writer.write("}{%\n");
                 int skip = random.nextInt(4);
                 for (int i = 0; i < 3; i++) {
                     writer.write("\\item ");
-//                    writer.write('A' + i + (skip < 0 ? 1 : 0));
-//                    writer.write(") ");
                     if (skip == 0) {
                         correctAnswers.add((char)('a' + i));
-                        writer.write(question.correctAnswer());
+                        writer.write(LaTeXUtils.escapeForLaTeX(question.correctAnswer()));
                         writer.write("\n\\item ");
-//                        writer.write('A' + i + 1);
-//                        writer.write(") ");
                     }
-                    writer.write(question.wrongAnswers().get(i));
+                    writer.write(LaTeXUtils.escapeForLaTeX(wrongAnswers.get(i)));
                     skip--;
                     writer.write("\n");
                 }
                 if (skip == 0) {
                     correctAnswers.add('d');
                     writer.write("\\item ");
-//                    writer.write("D) ");
-                    writer.write(question.correctAnswer());
+                    writer.write(LaTeXUtils.escapeForLaTeX(question.correctAnswer()));
                     writer.write("\n");
                 }
                 writer.write("}{}\n\n");
@@ -103,13 +102,11 @@ public class QuizQuestions extends ArrayList<QuizQuestion> {
             }
             counter++;
             if (counter > 4) {
-                Collections.shuffle(wrongAnswers);
                 this.add(new QuizQuestion(question, correctAnswer, wrongAnswers));
                 wrongAnswers = new ArrayList<String>();
                 counter = 0;
             }
         }
-        Collections.shuffle(this);
     }
 
 }

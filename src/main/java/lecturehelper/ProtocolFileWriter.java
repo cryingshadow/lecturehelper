@@ -25,13 +25,13 @@ public class ProtocolFileWriter {
             writer.write("\\documentclass{article}\n\n");
             writer.write("\\input{../../../../../../templates/protocol/packages.tex}\n");
             writer.write("\\newcommand{\\subject}{");
-            writer.write(meta.title());
+            writer.write(LaTeXUtils.escapeForLaTeX(meta.title()));
             writer.write("}\n");
             writer.write("\\newcommand{\\student}{");
-            writer.write(assignment.topicAssignment().participant());
+            writer.write(LaTeXUtils.escapeForLaTeX(assignment.topicAssignment().participant()));
             writer.write("}\n");
             writer.write("\\newcommand{\\presentationtitle}{");
-            writer.write(assignment.topicAssignment().topic());
+            writer.write(LaTeXUtils.escapeForLaTeX(assignment.topicAssignment().topic()));
             writer.write("}\n");
             writer.write("\\newcommand{\\presentationdate}{");
             writer.write(String.valueOf(assignment.date().getDayOfMonth()));
@@ -41,7 +41,7 @@ public class ProtocolFileWriter {
             writer.write(String.valueOf(assignment.date().getYear()));
             writer.write("}\n");
             writer.write("\\newcommand{\\presentationplace}{");
-            writer.write(place);
+            writer.write(LaTeXUtils.escapeForLaTeX(place));
             writer.write("}\n");
             if (meta.type() == ExaminationMode.TALK80QUIZ20) {
                 writer.write("\\setboolean{mandatoryhandout}{false}\n");
