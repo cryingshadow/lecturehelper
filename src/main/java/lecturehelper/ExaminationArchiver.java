@@ -10,7 +10,7 @@ import lecturehelper.structures.*;
 
 public class ExaminationArchiver {
 
-    private static final Set<String> FILE_TYPES = Set.of("pdf", "xlsx", "xls");
+    private static final Set<String> EXCLUDED_FILE_TYPES = Set.of("log", "tex", "out", "aux");
 
     public static void archiveExaminationFiles(
         final File classFile,
@@ -116,7 +116,9 @@ public class ExaminationArchiver {
     }
 
     private static boolean hasAllowedExtension(final String fileName) {
-        return ExaminationArchiver.FILE_TYPES.contains(fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase());
+        return !ExaminationArchiver.EXCLUDED_FILE_TYPES.contains(
+            fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase()
+        );
     }
 
     private static List<String> parseCommonFolders(final File classFile) throws IOException {
