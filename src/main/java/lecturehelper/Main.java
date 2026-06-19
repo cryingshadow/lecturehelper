@@ -68,6 +68,9 @@ public class Main {
         case REVIEWER_SHOW:
             ReviewerAssignments.showAssignmentsByReviewer(new File(options.get(Flag.ASSIGNMENT)));
             break;
+        case STATISTICS:
+            StatisticsFileWriter.writeStatisticsFileFromProtocols(new File(options.get(Flag.CLASSFILE)));
+            break;
         case TALK:
             ProtocolsFolderInitializer.initializeProtocolsFolder(
                 new File(options.get(Flag.ASSIGNMENT)),

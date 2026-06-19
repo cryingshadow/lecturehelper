@@ -21,6 +21,8 @@ public enum Mode {
 
     REVIEWER_SHOW("Show reviewer distribution by reviewer.", Set.of(Flag.ASSIGNMENT)),
 
+    STATISTICS("Compile statistics file from protocols.", Set.of(Flag.CLASSFILE)),
+
     TALK("Prepare talk protocols.", Set.of(Flag.CLASSFILE, Flag.ASSIGNMENT));
 
     public final String description;

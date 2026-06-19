@@ -48,15 +48,17 @@ public class ProtocolFileWriter {
                 writer.write("\\setboolean{mandatoryhandout}{false}\n");
             }
             writer.write("\n");
-            writer.write("\\newcommand{\\presentationContent}{%\n");
-            writer.write("Der Vortrag behandelte das Thema \\presentationtitle.\\\\[2ex]\n");
-            writer.write("\\notes{%\n");
-            writer.write("\\item Start: \n");
-            writer.write("\\item \n");
-            writer.write("\\item Ende Vortrag: \n");
-            writer.write("\\item Prüfer: ?\n");
-            writer.write("\\item Ende Diskussion: \n");
-            writer.write("}\n}\n\n");
+            if (talkMode != TalkMode.PRACTICAL) {
+                writer.write("\\newcommand{\\presentationContent}{%\n");
+                writer.write("Der Vortrag behandelte das Thema \\presentationtitle.\\\\[2ex]\n");
+                writer.write("\\notes{%\n");
+                writer.write("\\item Start: \n");
+                writer.write("\\item \n");
+                writer.write("\\item Ende Vortrag: \n");
+                writer.write("\\item Prüfer: ?\n");
+                writer.write("\\item Ende Diskussion: \n");
+                writer.write("}\n}\n\n");
+            }
             switch (talkMode) {
             case TALK80QUIZ20:
                 writer.write("\\newcommand{\\presentationUnderstandability}{%\n");
@@ -218,15 +220,36 @@ public class ProtocolFileWriter {
                 writer.write("\\evaluationpartresult{20}\n");
                 writer.write("}\n\n");
                 break;
+            case PRACTICAL:
+                writer.write("\\newcommand{\\project}{%\n");
+                writer.write("\\projectcontributions\n");
+                writer.write("Die individuellen Beiträge umfassten:\n");
+                writer.write("\\begin{itemize}\n");
+                writer.write("\\item \\contributionvalue{0}\n");
+                writer.write("\\end{itemize}%\n");
+                writer.write("\\evaluationpartresult{100}\n");
+                writer.write("}\n\n");
+                break;
+            default:
+                throw new IllegalStateException("Some enum constant has not yet been implemented!");
             }
             writer.write("\\newcommand{\\totalReview}{%\n");
-            writer.write(
-                "Insgesamt wurden \\evaluationpoints{} Punkte erreicht und das Gesamturteil lautet: \\grade\n"
-            );
-            writer.write("}\n\n");
-            if (talkMode == TalkMode.TALK50SCIENCE) {
-                writer.write("\\input{../../../../../../templates/protocol/protocolScience.tex}\n");
+            if (talkMode == TalkMode.PRACTICAL) {
+                writer.write("Auf Basis der erreichten Punktzahl lautet das Gesamturteil: \\grade\n");
             } else {
+                writer.write(
+                    "Insgesamt wurden \\evaluationpoints{} Punkte erreicht und das Gesamturteil lautet: \\grade\n"
+                );
+            }
+            writer.write("}\n\n");
+            switch (talkMode) {
+            case TALK50SCIENCE:
+                writer.write("\\input{../../../../../../templates/protocol/protocolScience.tex}\n");
+                break;
+            case PRACTICAL:
+                writer.write("\\input{../../../../../../templates/protocol/protocolProject.tex}\n");
+                break;
+            default:
                 writer.write("\\input{../../../../../../templates/protocol/protocol.tex}\n");
             }
         }
