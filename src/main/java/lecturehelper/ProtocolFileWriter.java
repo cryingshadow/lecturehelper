@@ -11,22 +11,21 @@ public class ProtocolFileWriter {
 
     public static void writeProtocolFile(
         final Path protocols,
-        final TalkMode talkMode,
-        final Subject subject,
+        final MetaInformation meta,
         final String place,
         final TalkAssignment assignment
     ) throws IOException {
         final String protocol =
             String.format(
                 "protokoll%s%s.tex",
-                subject.shortName(),
+                meta.shorttitle(),
                 NameTransformer.encodeNameForFile(assignment.topicAssignment().participant())
             );
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(protocols.resolve(protocol).toFile()))) {
             writer.write("\\documentclass{article}\n\n");
             writer.write("\\input{../../../../../../templates/protocol/packages.tex}\n");
             writer.write("\\newcommand{\\subject}{");
-            writer.write(subject.name());
+            writer.write(meta.title());
             writer.write("}\n");
             writer.write("\\newcommand{\\student}{");
             writer.write(assignment.topicAssignment().participant());
@@ -44,11 +43,11 @@ public class ProtocolFileWriter {
             writer.write("\\newcommand{\\presentationplace}{");
             writer.write(place);
             writer.write("}\n");
-            if (talkMode == TalkMode.TALK80QUIZ20) {
+            if (meta.type() == ExaminationMode.TALK80QUIZ20) {
                 writer.write("\\setboolean{mandatoryhandout}{false}\n");
             }
             writer.write("\n");
-            if (talkMode != TalkMode.PRACTICAL) {
+            if (meta.type() != ExaminationMode.PRACTICAL) {
                 writer.write("\\newcommand{\\presentationContent}{%\n");
                 writer.write("Der Vortrag behandelte das Thema \\presentationtitle.\\\\[2ex]\n");
                 writer.write("\\notes{%\n");
@@ -59,7 +58,7 @@ public class ProtocolFileWriter {
                 writer.write("\\item Ende Diskussion: \n");
                 writer.write("}\n}\n\n");
             }
-            switch (talkMode) {
+            switch (meta.type()) {
             case TALK80QUIZ20:
                 writer.write("\\newcommand{\\presentationUnderstandability}{%\n");
                 writer.write("\\understandingstructureviii{}\n");
@@ -115,7 +114,7 @@ public class ProtocolFileWriter {
                 writer.write("\\applicationusersiii{}\n");
                 writer.write("\\evaluationpartresult{10}\n");
                 writer.write("}\n\n");
-                if (talkMode == TalkMode.TALK40QUIZ10) {
+                if (meta.type() == ExaminationMode.TALK40QUIZ10) {
                     writer.write("\\newcommand{\\handout}{%\n");
                     writer.write("\\handoutdefault{}\n");
                     writer.write("\\handoutamountiii{}\n");
@@ -234,7 +233,7 @@ public class ProtocolFileWriter {
                 throw new IllegalStateException("Some enum constant has not yet been implemented!");
             }
             writer.write("\\newcommand{\\totalReview}{%\n");
-            if (talkMode == TalkMode.PRACTICAL) {
+            if (meta.type() == ExaminationMode.PRACTICAL) {
                 writer.write("Auf Basis der erreichten Punktzahl lautet das Gesamturteil: \\grade\n");
             } else {
                 writer.write(
@@ -242,7 +241,7 @@ public class ProtocolFileWriter {
                 );
             }
             writer.write("}\n\n");
-            switch (talkMode) {
+            switch (meta.type()) {
             case TALK50SCIENCE:
                 writer.write("\\input{../../../../../../templates/protocol/protocolScience.tex}\n");
                 break;

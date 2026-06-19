@@ -8,15 +8,15 @@ import java.util.*;
 import lecturehelper.*;
 import ocp.*;
 
-public class CalendarExport extends LinkedHashMap<Lecture, List<OCEntry>>{
+public class CalendarExport extends LinkedHashMap<LectureForCalendar, List<OCEntry>>{
 
     private static final long serialVersionUID = 1L;
 
     public static void createClassFiles(final File participantsList, final File calendarExport) throws IOException {
-        final Map<Lecture, List<String>> participantsByEvent = new ParticipantsList(participantsList);
+        final Map<LectureForCalendar, List<String>> participantsByEvent = new ParticipantsList(participantsList);
         final CalendarExport calendarEntriesByEvent = CalendarExport.parseCalendarExport(calendarExport);
-        for (final Map.Entry<Lecture, List<String>> participantsEntries : participantsByEvent.entrySet()) {
-            final Lecture lecture = participantsEntries.getKey();
+        for (final Map.Entry<LectureForCalendar, List<String>> participantsEntries : participantsByEvent.entrySet()) {
+            final LectureForCalendar lecture = participantsEntries.getKey();
             if (calendarEntriesByEvent.containsKey(lecture)) {
                 final List<OCEntry> calendarEntries = calendarEntriesByEvent.get(lecture);
                 final File classFile =
@@ -53,7 +53,7 @@ public class CalendarExport extends LinkedHashMap<Lecture, List<OCEntry>>{
     }
 
     private static File computeClassFile(
-        final Lecture lecture,
+        final LectureForCalendar lecture,
         final List<OCEntry> calendarEntries,
         final Path lecturesPath
     ) {
@@ -108,7 +108,7 @@ public class CalendarExport extends LinkedHashMap<Lecture, List<OCEntry>>{
         );
     }
 
-    private static String toClassFileName(final Lecture lecture, final List<OCEntry> calendarEntries) {
+    private static String toClassFileName(final LectureForCalendar lecture, final List<OCEntry> calendarEntries) {
         final TreeSet<String> prefixes = new TreeSet<String>();
         final TreeSet<String> infixes = new TreeSet<String>();
         final TreeSet<Integer> years = new TreeSet<Integer>();
@@ -150,7 +150,7 @@ public class CalendarExport extends LinkedHashMap<Lecture, List<OCEntry>>{
         return String.format("%02d%d", year, quarter);
     }
 
-    private CalendarExport(final Map<Lecture, List<OCEntry>> map) {
+    private CalendarExport(final Map<LectureForCalendar, List<OCEntry>> map) {
         super(map);
     }
 

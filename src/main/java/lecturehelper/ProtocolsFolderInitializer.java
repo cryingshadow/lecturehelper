@@ -18,8 +18,7 @@ public class ProtocolsFolderInitializer {
         final Path quizAnswers = root.resolve("quizAnswers");
         quizAnswers.toFile().mkdir();
         final File metaFile = root.getParent().resolve("meta.txt").toFile();
-        final Subject subject = Subject.fromFile(metaFile);
-        final TalkMode talkMode = TalkMode.fromFile(metaFile);
+        final MetaInformation meta = Main.parseMetaInformation(metaFile);
         final int numberOfTopics = Integer.parseInt(Files.lines(metaFile.toPath()).skip(3).findFirst().get());
         final String place =
             root.toFile().getName().substring(3).toLowerCase().startsWith("m") ? "Mettmann" : "Bergisch Gladbach";
@@ -52,7 +51,7 @@ public class ProtocolsFolderInitializer {
                     metaFile,
                     numberOfTopics
                 );
-                ProtocolFileWriter.writeProtocolFile(protocols, talkMode, subject, place, assignment);
+                ProtocolFileWriter.writeProtocolFile(protocols, meta, place, assignment);
                 final String[] nameParts = assignment.topicAssignment().participant().split(" ");
                 final String lastName = nameParts[nameParts.length - 1].toLowerCase();
                 try (

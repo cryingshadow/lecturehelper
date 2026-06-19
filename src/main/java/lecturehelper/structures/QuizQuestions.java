@@ -5,13 +5,9 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
-import com.google.gson.*;
-
 import lecturehelper.*;
 
 public class QuizQuestions extends ArrayList<QuizQuestion> {
-
-    private static final Gson GSON = new Gson();
 
     private static final long serialVersionUID = 1L;
 
@@ -66,7 +62,7 @@ public class QuizQuestions extends ArrayList<QuizQuestion> {
     private static Quiz parseQuiz(final File quizFile) throws IOException {
         if (quizFile.getName().toLowerCase().endsWith("json")) {
             try (BufferedReader reader = new BufferedReader(new FileReader(quizFile))) {
-                return QuizQuestions.GSON.fromJson(reader, Quiz.class);
+                return Main.GSON.fromJson(reader, Quiz.class);
             }
         }
         final List<String> lines = Files.lines(quizFile.toPath()).filter(line -> !line.isBlank()).toList();

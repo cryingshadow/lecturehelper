@@ -6,10 +6,14 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
+import com.google.gson.*;
+
 import clit.*;
 import lecturehelper.structures.*;
 
 public class Main {
+
+    public static final Gson GSON = new Gson();
 
     public static String escapeForLaTeX(final String text) {
         return text.replaceAll("\\\\", "\\\\textbackslash")
@@ -79,6 +83,12 @@ public class Main {
             break;
         default:
             throw new IllegalStateException("Unknown Mode detected!");
+        }
+    }
+
+    public static MetaInformation parseMetaInformation(final File metaFile) throws IOException {
+        try (Reader reader = new BufferedReader(new FileReader(metaFile))) {
+            return Main.GSON.fromJson(reader, MetaInformation.class);
         }
     }
 

@@ -3,23 +3,26 @@ package lecturehelper.structures;
 import java.io.*;
 import java.util.*;
 
-public class ParticipantsList extends LinkedHashMap<Lecture, List<String>> {
+public class ParticipantsList extends LinkedHashMap<LectureForCalendar, List<String>> {
 
     private static final long serialVersionUID = 1L;
 
-    private static Lecture extractLecture(final String line, final BufferedReader reader) throws IOException {
+    private static LectureForCalendar extractLecture(
+        final String line,
+        final BufferedReader reader
+    ) throws IOException {
         String lectureLine = line;
         while (lectureLine.chars().filter(i -> i == '|').count() != 2) {
             lectureLine += reader.readLine();
         }
-        return Lecture.parse(lectureLine.substring(0, lectureLine.lastIndexOf('|') - 1));
+        return LectureForCalendar.parse(lectureLine.substring(0, lectureLine.lastIndexOf('|') - 1));
     }
 
     public ParticipantsList(final File participantsList) throws IOException {
         super();
         try (BufferedReader reader = new BufferedReader(new FileReader(participantsList))) {
             String line = reader.readLine();
-            Lecture currentLecture = ParticipantsList.extractLecture(line, reader);
+            LectureForCalendar currentLecture = ParticipantsList.extractLecture(line, reader);
             List<String> currentParticipants = new LinkedList<String>();
             line = reader.readLine();
             while (line != null) {
@@ -31,7 +34,7 @@ public class ParticipantsList extends LinkedHashMap<Lecture, List<String>> {
                     reader.readLine();
                     line = reader.readLine().substring(1);
                     if (!line.isBlank()) {
-                        Lecture lectureOnPage = ParticipantsList.extractLecture(line, reader);
+                        final LectureForCalendar lectureOnPage = ParticipantsList.extractLecture(line, reader);
                         if (!currentLecture.equals(lectureOnPage)) {
                             this.put(currentLecture, currentParticipants);
                             currentLecture = lectureOnPage;

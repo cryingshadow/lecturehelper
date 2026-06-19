@@ -52,82 +52,68 @@ public class RootFolderInitializer {
             )
         );
         final File metaFile = root.getParent().resolve("meta.txt").toFile();
-        try (BufferedReader reader = new BufferedReader(new FileReader(metaFile))) {
-            reader.readLine();
-            reader.readLine();
-            final String thirdLine = reader.readLine();
-            if (thirdLine != null && !thirdLine.isBlank()) {
-                if ("EXAM".equals(thirdLine)) {
-                    final Path exercisesPath = root.resolve("exercises");
-                    exercisesPath.toFile().mkdir();
-                    ScriptWriter.writeExecutableScript(
-                        exercisesPath,
-                        "exgen.sh",
-                        List.of(
-                            "#!/bin/bash",
-                            "",
-                            "cd ../../../exercises",
-                            "",
-                            "for d in */ ; do",
-                            "  cd $d",
-                            "  . build.sh",
-                            "  cd ..",
-                            "done",
-                            "",
-                            String.format("cd ../classes/%s/exercises", root.getFileName().toString())
-                        )
-                    );
-                    ScriptWriter.writeExecutableScript(
-                        exercisesPath,
-                        "build.sh",
-                        List.of(
-                            "#!/bin/bash",
-                            "",
-                            ". exgen.sh",
-                            "",
-                            "compile(){",
-                            "    pdflatex \"$1\"",
-                            "    pdflatex \"$1\"",
-                            "}",
-                            "",
-                            "for i in exercise*.tex; do",
-                            "    compile \"$i\" &",
-                            "done",
-                            "",
-                            "for i in solution*.tex; do",
-                            "    compile \"$i\" &",
-                            "done",
-                            "",
-                            "for i in exampleExam*.tex; do",
-                            "    compile \"$i\" &",
-                            "done",
-                            "",
-                            "wait"
-                        )
-                    );
-                } else {
-                    final int numOfTopics = Integer.parseInt(reader.readLine());
-                    final String[] topics = new String[numOfTopics];
-                    for (int i = 0; i < numOfTopics; i++) {
-                        topics[i] = reader.readLine().split(";")[0];
-                    }
-                    try (
-                        BufferedWriter writer =
-                            new BufferedWriter(new FileWriter(root.resolve("preferences.txt").toFile()))
-                    ) {
-                        writer.write(String.valueOf(numOfTopics));
-                        writer.write("\n");
-                        for (final String topic : topics) {
-                            writer.write(topic);
-                            writer.write("\n");
-                        }
-                        writer.write(String.valueOf(participantsAndDates.participants().length));
-                        writer.write("\n");
-                        for (final String participant : participantsAndDates.participants()) {
-                            writer.write(participant);
-                            writer.write(";\n");
-                        }
-                    }
+        final MetaInformation meta = Main.parseMetaInformation(metaFile);
+        if (meta.type() == ExaminationMode.EXAM) {
+            final Path exercisesPath = root.resolve("exercises");
+            exercisesPath.toFile().mkdir();
+            ScriptWriter.writeExecutableScript(
+                exercisesPath,
+                "exgen.sh",
+                List.of(
+                    "#!/bin/bash",
+                    "",
+                    "cd ../../../exercises",
+                    "",
+                    "for d in */ ; do",
+                    "  cd $d",
+                    "  . build.sh",
+                    "  cd ..",
+                    "done",
+                    "",
+                    String.format("cd ../classes/%s/exercises", root.getFileName().toString())
+                )
+            );
+            ScriptWriter.writeExecutableScript(
+                exercisesPath,
+                "build.sh",
+                List.of(
+                    "#!/bin/bash",
+                    "",
+                    ". exgen.sh",
+                    "",
+                    "compile(){",
+                    "    pdflatex \"$1\"",
+                    "    pdflatex \"$1\"",
+                    "}",
+                    "",
+                    "for i in exercise*.tex; do",
+                    "    compile \"$i\" &",
+                    "done",
+                    "",
+                    "for i in solution*.tex; do",
+                    "    compile \"$i\" &",
+                    "done",
+                    "",
+                    "for i in exampleExam*.tex; do",
+                    "    compile \"$i\" &",
+                    "done",
+                    "",
+                    "wait"
+                )
+            );
+        } else {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(root.resolve("preferences.txt").toFile()))) {
+                writer.write(String.valueOf(meta.topics().size()));
+                writer.write("\n");
+                for (final Topic topic : meta.topics()) {
+                    writer.write(topic.topic());
+                    writer.write("\n");
+                }
+                writer.write(String.valueOf(participantsAndDates.participants().length));
+                writer.write("\n");
+                for (final String participant : participantsAndDates.participants()) {
+                    writer.write(participant);
+                    writer.write(";\n");
                 }
             }
         }

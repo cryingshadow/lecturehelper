@@ -29,9 +29,8 @@ public class StatisticsFileWriter {
         final ParticipantsAndDates participantsAndDates = ParticipantsAndDates.fromFile(classFile);
         final String group = StatisticsFileWriter.parseGroupFromClassFile(classFile);
         final File metaFile = root.getParent().resolve("meta.txt").toFile();
-        final Subject subject = Subject.fromFile(metaFile);
-        final TalkMode talkMode = TalkMode.fromFile(metaFile);
-        final String fileName = String.format("statistics%s%s.tex", subject.shortName(), group);
+        final MetaInformation meta = Main.parseMetaInformation(metaFile);
+        final String fileName = String.format("statistics%s%s.tex", meta.shorttitle(), group);
         final String date =
             Arrays.stream(participantsAndDates.dates()).sorted(Comparator.reverseOrder()).findFirst().get();
         final Path protocols = root.resolve("protocols");
@@ -60,9 +59,9 @@ public class StatisticsFileWriter {
             writer.write("\\vspace*{2cm}\n\n");
             writer.write("\\begin{center}\n\n");
             writer.write("{\\Huge \\textbf{Notenspiegel ");
-            writer.write(talkMode == TalkMode.PRACTICAL ? "Praktische Prüfung" : "Referat");
+            writer.write(meta.type() == ExaminationMode.PRACTICAL ? "Praktische Prüfung" : "Referat");
             writer.write(" ");
-            writer.write(subject.shortName());
+            writer.write(meta.shorttitle());
             writer.write(" vom ");
             writer.write(String.format("%s.%s.20%s", date.substring(4, 6), date.substring(2, 4), date.substring(0, 2)));
             writer.write("}}\n\n");
