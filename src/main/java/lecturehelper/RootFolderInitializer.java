@@ -51,7 +51,7 @@ public class RootFolderInitializer {
                 "java -jar ../../../../nameandgrouppicker.jar PICK -n $1.txt -f frequencies.txt"
             )
         );
-        final File metaFile = root.getParent().resolve("meta.txt").toFile();
+        final File metaFile = root.getParent().resolve(Main.META_FILE_NAME).toFile();
         final MetaInformation meta = Main.parseMetaInformation(metaFile);
         if (meta.type() == ExaminationMode.EXAM) {
             final Path exercisesPath = root.resolve("exercises");

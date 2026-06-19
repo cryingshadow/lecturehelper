@@ -28,7 +28,7 @@ public class StatisticsFileWriter {
         final Path root = Main.getRootFromClassFile(classFile);
         final ParticipantsAndDates participantsAndDates = ParticipantsAndDates.fromFile(classFile);
         final String group = StatisticsFileWriter.parseGroupFromClassFile(classFile);
-        final File metaFile = root.getParent().resolve("meta.txt").toFile();
+        final File metaFile = root.getParent().resolve(Main.META_FILE_NAME).toFile();
         final MetaInformation meta = Main.parseMetaInformation(metaFile);
         final String fileName = String.format("statistics%s%s.tex", meta.shorttitle(), group);
         final String date =

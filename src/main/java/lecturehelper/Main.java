@@ -15,6 +15,8 @@ public class Main {
 
     public static final Gson GSON = new Gson();
 
+    public static final String META_FILE_NAME = "meta.json";
+
     public static String escapeForLaTeX(final String text) {
         return text.replaceAll("\\\\", "\\\\textbackslash")
             .replaceAll("([&\\$%\\{\\}_#])", "\\\\$1")

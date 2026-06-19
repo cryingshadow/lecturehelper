@@ -17,7 +17,7 @@ public class ProtocolsFolderInitializer {
         protocols.toFile().mkdir();
         final Path quizAnswers = root.resolve("quizAnswers");
         quizAnswers.toFile().mkdir();
-        final File metaFile = root.getParent().resolve("meta.txt").toFile();
+        final File metaFile = root.getParent().resolve(Main.META_FILE_NAME).toFile();
         final MetaInformation meta = Main.parseMetaInformation(metaFile);
         final int numberOfTopics = Integer.parseInt(Files.lines(metaFile.toPath()).skip(3).findFirst().get());
         final String place =
