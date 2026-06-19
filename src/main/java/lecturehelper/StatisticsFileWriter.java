@@ -61,7 +61,7 @@ public class StatisticsFileWriter {
             writer.write("{\\Huge \\textbf{Notenspiegel ");
             writer.write(meta.type() == ExaminationMode.PRACTICAL ? "Praktische Prüfung" : "Referat");
             writer.write(" ");
-            writer.write(meta.shorttitle());
+            writer.write(Main.escapeForLaTeX(meta.shorttitle()));
             writer.write(" vom ");
             writer.write(String.format("%s.%s.20%s", date.substring(4, 6), date.substring(2, 4), date.substring(0, 2)));
             writer.write("}}\n\n");
