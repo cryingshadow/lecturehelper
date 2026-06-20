@@ -6,9 +6,13 @@ public record MetaInformation(
     String title,
     String shorttitle,
     ExaminationMode type,
-    List<String> sheets,
-    List<String> exams,
-    List<Topic> topics
+    Integer firstsheetnr,
+    List<Sheet> sheets,
+    String exercisepath,
+    List<HelperFile> exerciseextra,
+    List<Exam> exams,
+    List<Topic> topics,
+    List<Slides> slides
 ) {
 
 }
