@@ -57,7 +57,7 @@ public class Main {
             );
             break;
         case CLASS:
-            CalendarExport.createClassFiles(
+            ClassFileCreator.createClassFiles(
                 new File(options.get(Flag.PARTICIPANTS)),
                 new File(options.get(Flag.EXPORT))
             );

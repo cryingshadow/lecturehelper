@@ -28,9 +28,11 @@ public class ProtocolsFolderInitializer {
             assignments = new TalkAssignments(assignmentReader, dates);
         }
         ProtocolsFolderInitializer.writeBuildFile(protocols);
+        final File quizSolutions = root.resolve("quizSolutions").toFile();
+        quizSolutions.mkdir();
         try (
             BufferedWriter solutionsWriter =
-                new BufferedWriter(new FileWriter(root.resolve("quizSolutions.csv").toFile()))
+                new BufferedWriter(new FileWriter(quizSolutions.toPath().resolve("quizSolutions.csv").toFile()))
         ) {
             LocalDate current = LocalDate.MIN;
             int numOfTalksWithoutBreak = 0;
